@@ -1,0 +1,15 @@
+.zshrc
+.zsh_aliases
+.dotfiles
+.xinitrc
+Pictures/Wallpapers
+.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+.config/git
+.zprofile
+installed-packages
+.emacs
+.emacs.d/emacs-init.org
+.emacs.d/bookmarks
+fstab-backup
+.config/hblock/allow.list
+.etc-backup-config-files

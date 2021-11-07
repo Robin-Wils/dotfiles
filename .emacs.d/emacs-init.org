@@ -1,0 +1,474 @@
+* LICENSE NOTICE AND CONFIGURATION COMMENTARY
+#+BEGIN_SRC emacs-lisp
+  ;; This config is public domain.
+
+  ;;; Commentary:
+  ;; Quick Start / installation:
+  ;; 1. Place emacs-init.org into your .emacs.d directory.
+  ;; 2. Replace your .emacs file with my .emacs one.
+  ;; (It is recommended to backup your .emacs file before you do this)
+
+  ;;; Code:
+#+END_SRC
+* INITIALIZE PACKAGES
+#+BEGIN_SRC emacs-lisp
+(package-initialize)
+#+END_SRC
+* REPOSITORIES
+The official repository misses a lot of packages. MELPA is a more popular
+repository which contains more packages.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+#+END_SRC
+* FASTER STARTUP
+Emacs should load faster if with this configured. This is only recommended if your machine has enough RAM. It should work on the most modern machines.
+#+BEGIN_SRC emacs-lisp
+(setq gc-cons-threshold 64000000)
+(add-hook 'after-init-hook
+          #'(lambda () (setq gc-cons-threshold 800000)))
+#+END_SRC
+* USE-PACKAGE
+Install use-package if it is not installed.
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+#+END_SRC
+
+Require use-package.
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile (require 'use-package))
+#+END_SRC
+* DEFAULT ENCORDING
+#+BEGIN_SRC emacs-lisp
+;; UTF-8 as default encoding
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8-unix)
+#+END_SRC
+* WINDOWS SIZE AND THEME
+#+BEGIN_SRC emacs-lisp
+;; darktooth theme is also pretty nice if you prefer a dark theme.
+;;(use-package darktooth-theme
+;;  :ensure t
+;;  :config (load-theme 'darktooth t))
+
+;; Light theme
+(if (display-graphic-p)
+    (setq initial-frame-alist
+          '(
+            (tool-bar-lines . 0)
+            (background-color . "honeydew")
+            (width . 90)
+            (height . 52)))
+  (setq initial-frame-alist '( (tool-bar-lines . 0))))
+
+(setq default-frame-alist
+      '(
+        (tool-bar-lines . 0)
+        (background-color . "honeydew")
+        (width . 88)
+        (height . 50)))
+
+;; Emacs font
+(add-to-list 'default-frame-alist
+             '(font . "Hack-8"))
+#+END_SRC
+* VARIABLES
+#+BEGIN_SRC emacs-lisp
+  (setq
+   ;; Personal information
+   user-full-name "Robin Wils"
+   user-mail-address "mrwils@tutanota.com"
+
+   ;; No startup message.
+   inhibit-startup-message t
+
+   ;; No startup-screen
+   inhibit-startup-screen t
+
+   ;; Empty scratch buffer
+   initial-scratch-message nil
+
+   ;; End sentences with one space
+   sentence-end-double-space nil
+
+   ;; No backups
+   make-backup-files nil
+
+   ;; Disable dialogs
+   use-dialog-box nil
+
+   ;; Disable emacs beep
+   visible-bell 1
+
+   ;; stop emacs from creating .#lock file links
+   create-lockfiles nil
+
+   ;; stop creating #auto-save# files
+   auto-save-default nil
+
+   ;; Default directory, useful on windows
+   ;; default-directory "E:/Users/Robin Wils/Documents/"
+  )
+  (setq-default
+   ;; Mark column 100 in the header (Clean code matters)
+   header-line-format (list " " (make-string 99 ?-) "|")
+
+   ;; Force the messages to 0
+   message-log-max nil
+
+   ;; Always indent with tab
+   tab-always-indent 'complete
+
+   ;; no mixed tab space
+   indent-tabs-mode nil
+
+   ;; Set the tab-width
+   tab-width 4)
+
+   ;; Don't use tabs
+   ;; use spaces instead
+   ;; indent-tabs-mode nil)
+#+END_SRC
+
+* ALIASES
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'rs 'replace-string)
+(defalias 'lcd 'list-colors-display)
+(defalias 'ds 'desktop-save)
+
+(defalias 'dsm 'desktop-save-mode)
+(defalias 'elm 'emacs-lisp-mode)
+(defalias 'hm 'html-mode)
+(defalias 'jsm 'js-mode)
+(defalias 'fm 'fundamental-mode)
+(defalias 'ssm 'shell-script-mode)
+(defalias 'om 'org-mode)
+#+END_SRC
+* HIDE GUI ELEMENTS
+#+BEGIN_SRC emacs-lisp
+;; No cursor blink
+(blink-cursor-mode -1)
+
+;; Hide the toolbar
+(tool-bar-mode -1)
+
+;; Hide the menu bar
+;; (menu-bar-mode -1)
+#+END_SRC
+* BETTER DEFAULTS
+** Better dired (change default config)
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (dired-hide-details-mode)
+              (dired-sort-toggle-or-edit)))
+  ;; Don't ask for recursive copies, just do it.
+  (setq dired-recursive-copies 'always)
+  ;; Same thing for recursive deleting.
+  (setq dired-recursive-deletes 'always)
+  ;; Make it possible to copy from one buffer to another.
+  (setq dired-dwim-target t)
+  ;; Don't let Enter and ^ create a new buffer
+
+  ;; Did not work
+  ;;(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+  ;;(define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+#+END_SRC
+** Better keys - Xah Fly Keys
+I use Xah Fly Keys Dvorak. QWERTY and other layout support for this mode exists.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path (concat user-emacs-directory "/lisp"))
+  (
+   require 'xah-fly-keys)
+  (setq
+   xah-fly-use-control-key nil
+   xah-fly-use-meta-key nil
+   ;; disable shift select
+   shift-select-mode nil
+   )
+  (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+  (xah-fly-keys-set-layout "dvorak")
+  (xah-fly-keys 1)
+  ;; make typing delete/overwrites selected text
+  (delete-selection-mode 1)
+
+  (defun xah-replace-invisible-char ()
+    "Query replace some invisible Unicode chars.
+              The chars to be searched are:
+               ZERO WIDTH NO-BREAK SPACE (65279, #xfeff)
+               ZERO WIDTH SPACE (codepoint 8203, #x200b)
+               RIGHT-TO-LEFT MARK (8207, #x200f)
+               RIGHT-TO-LEFT OVERRIDE (8238, #x202e)
+               LEFT-TO-RIGHT MARK ‎(8206, #x200e)
+               OBJECT REPLACEMENT CHARACTER (65532, #xfffc)
+
+              Search begins at cursor position. (respects `narrow-to-region')
+
+              URL `http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html'
+              Version 2018-09-07"
+    (interactive)
+    (query-replace-regexp "\ufeff\\|\u200b\\|\u200f\\|\u202e\\|\u200e\\|\ufffc" ""))
+
+(defun xah-html-youtube-linkify ()
+  "Make the current line of youtube url into a embeded video.
+
+The line can be any of
+
+ https://www.youtube.com/watch?v=RhYNu6i_uY4
+ https://www.youtube.com/watch?v=RhYNu6i_uY4?t=198
+ https://youtu.be/RhYNu6i_uY4
+ https://www.youtube.com/embed/RhYNu6i_uY4
+ RhYNu6i_uY4
+
+Here's sample result:
+
+<figure>
+<iframe width=\"640\" height=\"480\" src=\"https://www.youtube.com/embed/RhYNu6i_uY4\" allowfullscreen></iframe>
+<figcaption>
+</figcaption>
+</figure>
+
+URL `http://ergoemacs.org/emacs/elisp_embed_youtube_vid.html'
+Version 2020-08-27 2021-06-05"
+  (interactive)
+  (let ( $p1 $p2 $inputStr $id $timeStamp )
+    (re-search-backward "[ \n]")
+    (forward-char )
+    (setq $p1 (point))
+    (re-search-forward "[ \n]" )
+    (setq $p2 (point))
+    (setq $inputStr (buffer-substring-no-properties $p1 $p2))
+    (setq $timeStamp
+          (if (or
+               (string-match "t=\\([0-9]+\\)" $inputStr )
+               (string-match "time_continue=\\([0-9]+\\)" $inputStr ))
+              (match-string 1 $inputStr)
+            ""))
+    (setq $id (xah-html-get-youtube-id $inputStr))
+    (delete-region $p1 $p2)
+    (insert
+     (format "
+
+<figure>
+<iframe width=\"640\" height=\"480\" src=\"https://www.youtube.com/embed/%s%s\" allowfullscreen></iframe>
+<figcaption>
+</figcaption>
+</figure>
+
+"
+             $id
+             (if (string-equal $timeStamp "")
+                 ""
+               (concat "?start=" $timeStamp))))
+    (search-backward "</figcaption>" )
+    (backward-char 1)))
+#+END_SRC
+** Better autosave
+See http://ergoemacs.org/emacs/emacs_auto_save.html for more info.
+#+BEGIN_SRC emacs-lisp
+(defun xah-save-all-unsaved ()
+  "Save all unsaved files. no ask.
+Version 2019-11-05"
+  (interactive)
+  (save-some-buffers t ))
+
+;; when switching out of emacs, all unsaved files will be saved
+(add-hook 'focus-out-hook 'xah-save-all-unsaved)
+
+#+END_SRC
+** Use async processes when it is possible
+#+BEGIN_SRC emacs-lisp
+(use-package async :ensure t :init (dired-async-mode 1))
+#+END_SRC
+** Show line numbers
+#+BEGIN_SRC emacs-lisp
+(global-display-line-numbers-mode)
+#+END_SRC
+** Open files as root if necessary
+This didn't work correctly with Xah Fly Keys.
+#+BEGIN_SRC emacs-lisp
+  ;; (defadvice find-file (after find-file-sudo activate)
+  ;;   "Find file as root if necessary."
+  ;;   (unless (and buffer-file-name
+  ;;                (file-writable-p buffer-file-name))
+  ;;     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+#+END_SRC
+** Better performance for big files
+#+BEGIN_SRC emacs-lisp
+(use-package vlf :ensure t)
+#+END_SRC
+* OWN HOOK FUNCTIONS
+** Untabify whole buffer
+Removes all the tabs in a buffer.
+#+BEGIN_SRC emacs-lisp
+(defun untabify-whole-buffer()
+  "Untabifies a whole buffer."
+  (interactive)
+  (untabify (point-min) (point-max)))
+#+END_SRC
+* LOAD OTHER SECRET FILES
+This file contains some (setq) variables. There is probably a better
+and more secure way to do this.
+#+BEGIN_SRC emacs-lisp
+(defun load-if-exists (file)
+  "load the elisp file only if it exists and if it is readable"
+  (if (file-readable-p file)
+      (load-file file)))
+;; For example: (load-if-exists "~/.secrets.el")
+#+END_SRC
+* SETUP SOME DEFAULTS
+** Kill the *Messages* buffer on startup
+#+BEGIN_SRC emacs-lisp
+(if (get-buffer "*Messages*")
+    (kill-buffer "*Messages*"))
+#+END_SRC
+** Disable *Completions* buffer
+#+BEGIN_SRC emacs-lisp
+(add-hook 'minibuffer-exit-hook
+          '(lambda ()
+             (let ((buffer "*Completions*"))
+               (and (get-buffer buffer)
+                    (kill-buffer buffer)))))
+#+END_SRC
+** Unset the default suspend-frame shortcut
+The default C-z command minimizes GNU emacs. I don't like that.
+#+BEGIN_SRC emacs-lisp
+(global-unset-key "\C-z")
+#+END_SRC
+** Replace typing "yes" or "no" with typing "y" or "n"
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** Make it possible to hide minor modes
+#+BEGIN_SRC emacs-lisp
+(use-package diminish :ensure t)
+#+END_SRC
+* PROGRAMMING
+** Lisp
+#+BEGIN_SRC emacs-lisp
+(use-package slime
+  :ensure t
+  :commands (slime slime-lisp-mode-hook)
+  :config
+  (setq inferior-lisp-program "sbcl" slime-contribs '(slime-fancy)))
+#+END_SRC
+** Godot
+#+BEGIN_SRC emacs-lisp
+(use-package gdscript-mode
+   :ensure t
+   :config
+   (standard-display-ascii ?\t ">|  ")
+   ;; Save all buffers and format them with gdformat anytime Godot executable is run.
+   (setq gdscript-gdformat-save-and-format t))
+;;   :config
+;;   (setq gdscript-tabs-mode nil))
+#+END_SRC
+* SPELLING AND GRAMMAR
+** Flycheck and flyspell
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :defer 2
+  :diminish flycheck-mode " ✓"
+  :commands global-flycheck-mode
+  :config
+  (progn
+    (global-flycheck-mode 1)
+    (setq-default flycheck-disabled-checkers
+                  '(html-tidy
+                    emacs-lisp-checkdoc))))
+
+(use-package flyspell
+  :defer 2
+  :init
+  :config
+  (progn
+    (setq ispell-program-name "aspell")
+    (add-hook 'text-mode-hook 'flyspell-mode)))
+#+END_SRC
+** Trailing whitespace
+Remove trailing whitespace
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+* ORG MODE
+** Don't use org builtin package, use repository one instead
+#+BEGIN_SRC emacs-lisp
+(assq-delete-all 'org package--builtins)
+#+END_SRC
+** Some org mode settings
+#+BEGIN_SRC emacs-lisp
+(setq
+org-src-fontify-natively t
+org-startup-folded nil
+org-return-follows-link t
+org-startup-truncated nil
+org-startup-with-inline-images t)
+#+END_SRC
+** ox-hugo
+Hugo support in org-mode
+#+BEGIN_SRC emacs-lisp
+(use-package ox-hugo :ensure t :after ox)
+;; (with-eval-after-load 'ox
+;;   (require 'ox-hugo))
+#+END_SRC
+** org-mode better html export support
+#+BEGIN_SRC emacs-lisp
+(use-package htmlize :ensure t)
+#+END_SRC
+* MORE PACKAGES
+** IRC - ERC
+Use the erc-tls command to launch ERC
+erc-tls uses SSL, erc doesn't.
+
+TODO: add ZNC.
+#+BEGIN_SRC emacs-lisp
+(defalias 'erc 'erc-tls)
+(use-package erc
+  :defer t
+  :config
+  ;; load my sensitve nickserv passwords
+  (load-if-exists "~/.erc-secrets.el")
+
+  (setq
+   ;; server to use if none is provided
+   erc-server "irc.serverchan.club"
+   ;; server which you can choose from in the menu
+   erc-server-history-list
+   '("irc.serverchan.club" "irc.lainchan.org" "irc.freenode.net")
+   ;; port to use if none is provided
+   erc-port 6697
+   ;; nickname to use if none is provided
+   erc-nick "rmw"
+   ;; full-name to use if none is provided
+   ;; (my name is stored in the user-full-name variable)
+   erc-user-full-name user-full-name
+   ;; nickserv-passwords.
+   ;; (I do this in my secret file)
+   ;; (setq erc-nickserv-passwords
+   ;;       '((freenode     (("nick-one" . "password")
+   ;;                        ("nick-two" . "password")))
+   ;;         (lainchan     (("nickname" . "password")))))
+   ;; away nickname to use
+   erc-away-nickname "rmw-away"
+   ;; erc channels to autojoin
+   erc-autojoin-channels-alist
+   '(("serverchan.club" "#scoots")
+     ("lainchan.org" "#lainchan")
+     ("freenode.net" "#librelounge"))))
+
+;; SSL support
+(require 'tls)
+(setq
+ tls-program
+ '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof
+                                    -CAfile /home/ootput/.private/certs/CAs.pem
+                                    -cert /home/ootput/.private/certs/nick.pem"
+   "gnutls-cli --priority secure256
+               --x509cafile /home/ootput/.private/certs/CAs.pem
+               --x509certfile /home/ootput/.private/certs/nick.pem -p %p %h"
+   "gnutls-cli --priority secure256 -p %p %h"))
+#+END_SRC

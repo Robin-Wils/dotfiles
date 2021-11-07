@@ -1,0 +1,15 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("emacsconfig"
+ (filename . "~/.emacs.d/emacs-init.org")
+ (front-context-string . "\n\n ;; Disable di")
+ (rear-context-string . "backup-files nil")
+ (position . 2422))
+("website"
+ (filename . "~/Documents/Projects/robinwils.com/")
+ (front-context-string . ".\n  drwxr-xr-x  ")
+ (rear-context-string . "96 May  7 19:15 ")
+ (position . 253))
+)

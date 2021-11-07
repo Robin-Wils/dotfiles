@@ -1,0 +1,6 @@
+[user]
+	email = mrwils@tutanota.com
+	name = Robin Wils
+[core]
+	editor = emacs
+	excludesfile = git_ignore_global

@@ -1,0 +1,19 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/sda2
+UUID=d1ffc3bd-6e4f-440b-97a0-ab74dd904fbd	/         	f2fs      	rw,noatime,lazytime,background_gc=on,discard,no_heap,inline_xattr,inline_data,inline_dentry,flush_merge,extent_cache,mode=adaptive,active_logs=6,alloc_mode=default,nocheckpoint_merge,fsync_mode=posix	0 0
+
+# /dev/sda1
+UUID=180E-315B      	/boot     	vfat      	rw,noatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/sdc1
+UUID=d0d510be-afa5-4038-8a43-fd5fec3cc8e7	/home     	ext4      	rw,noatime,commit=60	0 2
+
+# /dev/sdc2
+UUID=fe30f101-5c67-4fd0-9218-c53830d1562c	/opt      	ext4      	rw,noatime,commit=60	0 2
+
+# /dev/sdc4
+UUID=0a6721bf-96c8-455f-a142-0814debeda73	/var      	ext4      	rw,noatime,commit=60	0 2
+

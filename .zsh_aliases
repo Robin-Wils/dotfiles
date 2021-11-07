@@ -1,0 +1,9 @@
+alias s='sudo'
+alias syncHorrorPlaylist='sudo yt-dlp -x --download-archive /home/rmw/Music/Music/horror-playlist/archive.txt -P /home/rmw/Music/Music/ "https://www.youtube.com/watch?v=_Wy2bqJZGmM&list=PLFYh-67i3qNhsgzC8E2TImECpaMSpT8zH"'
+# Formatted directory listings
+alias ll='ls -lF --color=auto'
+alias la="ls -alF --color=auto"
+alias lt='ls --human-readable --size -1 -S --classify --color=auto'
+alias ls='ls -F --color=auto'
+alias sysd="sudo systemctl"
+alias create-packages-file="pacman -Qqe > ~/installed-packages"
