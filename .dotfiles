@@ -14,3 +14,4 @@ fstab-backup
 .config/hblock/allow.list
 .etc-backup-config-files
 .gitignore
+.emacs.d/lisp
