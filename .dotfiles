@@ -15,3 +15,4 @@ fstab-backup
 .etc-backup-config-files
 .gitignore
 .emacs.d/lisp
+.nvidia-install-help.txt

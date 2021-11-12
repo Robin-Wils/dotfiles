@@ -1,0 +1,5 @@
+# To use the tkg kernel I use, you need to add nvidia support to that kernel, you can do that with:
+
+git clone https://github.com/Frogging-Family/nvidia-all.git
+cd nvidia-all
+makepkg -si
